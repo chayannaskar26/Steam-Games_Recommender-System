@@ -19,9 +19,6 @@
             font-size: 14px;
             color: #333333;
         }
-        .search-button {
-            margin-left: 20px;
-        }
         .search-container {
             height: calc(100vh - 50px);
             color: #dcdedf;
@@ -51,11 +48,16 @@
                 <span class="d-block">
                     <label for="game-search-input" class="form-label search-label">Search for Game</label>
                 </span>
-                <input type="text" class="form-control w-75 d-inline-block" id="game-search-input" placeholder="Start typing a Game">
-                <button type="button" class="btn btn-dark search-button">Search Game</button>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-8 col-lg-8 col-xl-10 mt-3">
+                        <input type="text" class="form-control" id="game-search-input" placeholder="Start typing a Game">
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-lg-4 col-xl-2 mt-3">
+                        <button type="button" class="btn btn-dark search-button">Search Game</button>
+                    </div>
             </div>
             <!-- <span class="my-2 suggestion-text">Suggestions:</span> -->
-            <div class="list-group" id="games-list">
+            <div class="list-group mt-3" id="games-list">
             </div>
         </div>
     </div>
