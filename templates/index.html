@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} | Home</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
+    <style>
+        .navbar {
+            background: #171d25;
+            color: #dcdedf;
+        }
+        .navbar .navbar-brand {
+            color: #dcdedf;
+        }
+        .suggestion-text {
+            display: inline-block;
+            font-size: 14px;
+            color: #333333;
+        }
+        .search-button {
+            margin-left: 20px;
+        }
+        .search-container {
+            height: calc(100vh - 50px);
+            color: #dcdedf;
+            background-image: linear-gradient(90deg, rgba(62, 103, 150, 0.918) 11.38%, rgba(58, 120, 177, 0.8) 25.23%, rgb(15, 33, 110) 100%);
+        }
+        .search-label {
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+    <script>
+        var games_data = {{games_data | tojson}}
+    </script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand mb-0 h1" href="/">{{title}}</a>
+        </div>
+    </nav>
+    
+    <div class="container-fluid search-container">
+        <div class="container">
+            <div class="pt-5 mb-2">
+                <span class="d-block">
+                    <label for="game-search-input" class="form-label search-label">Search for Game</label>
+                </span>
+                <input type="text" class="form-control w-75 d-inline-block" id="game-search-input" placeholder="Start typing a Game">
+                <button type="button" class="btn btn-dark search-button">Search Game</button>
+            </div>
+            <!-- <span class="my-2 suggestion-text">Suggestions:</span> -->
+            <div class="list-group" id="games-list">
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(function() {
+            window.selectedGameId = '';
+
+            $('.search-button').on('click', function () {
+                window.location.href=`/game/${window.selectedGameId}`;
+            });
+            
+            $('#game-search-input').on('keyup', function () {
+                $('#games-list').empty();
+                let games_json = JSON.parse(games_data);
+                let searchText = $('#game-search-input').val();
+                const regexp = new RegExp(`^${searchText.trim()}`, 'i');
+                let filterd_data = games_json.filter(ele => {
+                    // title_match = ele.title.toLowerCase().startsWith(searchText.trim());
+                    title_match = regexp.test(ele.title);
+                    return title_match;
+                });
+                console.log(filterd_data);
+                filterd_data.forEach(ele => {
+                    let btnHtml = `<button class="list-group-item list-group-item-action game-select-button" game-id="${ele.appid}">${ele.title}</button>`;
+                    $('#games-list').append(btnHtml);
+                });
+            });
+
+            $('#games-list').on('click', function (e) {
+                if( $(e.target).hasClass('game-select-button') ) {
+                    let searchText = $(e.target).text();
+                    $('#game-search-input').val(searchText);
+                    selectedGameId = $(e.target).attr('game-id');
+                    $('#games-list').empty();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
