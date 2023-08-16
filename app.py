@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import render_template
-import ast
+from flask import send_from_directory
 import pandas as pd
 import numpy as np
 import json
@@ -57,7 +57,8 @@ def game(appid):
    }
 
    return render_template('game.html', title = title, appid = appid, recommended_games = recommended_games, selected_game_data = selected_game_data)
- 
+
+
 # main driver function
 if __name__ == '__main__':
    app.run()
