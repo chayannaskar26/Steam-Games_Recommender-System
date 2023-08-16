@@ -6,11 +6,11 @@ import numpy as np
 import json
 from urllib.request import urlopen
 
-import pickle
-games = pickle.load(open('Games.pkl', 'rb'))
+
+games = pd.read_pickle('Games.pkl')
 games_data = games[['appid', 'title']].to_json(orient="records")
 
-similarity = pickle.load(open('Similarity.pkl', 'rb'))
+similarity = pd.read_pickle('Similarity.pkl')
 
 def recommendGame(game_index):
    recommended_games = []
