@@ -25,6 +25,19 @@ def getGameData(appid):
 # Declaring Coloumn Names
 column_names = ['appid', 'title', 'short_description', 'is_free', 'supported_languages', 'developers', 'publishers' ,'platforms', 'categories', 'genres', 'release_date']
 
+# Ubisoft Dataset Game Data 
+def getUbisoftDetailsData():
+    ubisoft_df = pd.read_csv('Steam Ubisoft Games.csv')
+
+    req_json_list = []
+
+    for appid in ubisoft_df['appid']:
+        req_json_list.append(getGameData(appid))
+        
+    ubisoft_details_df = pd.DataFrame(req_json_list, columns=column_names)
+
+    return ubisoft_details_df 
+
 
 # Valve Dataset Game Data
 def getValveDetailsData():
@@ -53,19 +66,6 @@ def getActivisionDetailsData():
 
     return activision_details_df 
 
-
-# Ubisoft Dataset Game Data 
-def getUbisoftDetailsData():
-    ubisoft_df = pd.read_csv('Steam Ubisoft Games.csv')
-
-    req_json_list = []
-
-    for appid in ubisoft_df['appid']:
-        req_json_list.append(getGameData(appid))
-        
-    ubisoft_details_df = pd.DataFrame(req_json_list, columns=column_names)
-
-    return ubisoft_details_df 
 
 # Bethesda Dataset Game Data
 def getBethesdaDetailsData():
@@ -116,7 +116,7 @@ def main():
     # Concating to final dataframe
     final_df = pd.concat([valve_details_df, activision_details_df, ubisoft_details_df, bethesda_details_df, ea_details_df, other_details_df])
     final_df.reset_index(inplace=True, drop=True) 
-    final_df.to_csv('Steam Game Details.csv')
+    final_df.to_csv('../Steam Game Details.csv')
 
 
 if __name__ == "__main__":
