@@ -29,6 +29,11 @@
             font-weight: bold;
             font-size: 18px;
         }
+        .no-result {
+            color: #0312df;
+            font-size: 16px;
+            font-weight: 600;
+        }
     </style>
     <script>
         var games_data = {{games_data | tojson}}
@@ -50,7 +55,7 @@
                 </span>
                 <div class="row">
                     <div class="col-xs-12 col-sm-8 col-lg-8 col-xl-10 mt-3">
-                        <input type="text" class="form-control" id="game-search-input" placeholder="Start typing a Game">
+                        <input type="text" class="form-control" id="game-search-input" placeholder="Enter atleast 4 letters to search">
                     </div>
                     <div class="col-xs-12 col-sm-4 col-lg-4 col-xl-2 mt-3">
                         <button type="button" class="btn btn-dark search-button">Search Game</button>
@@ -76,17 +81,24 @@
                 $('#games-list').empty();
                 let games_json = JSON.parse(games_data);
                 let searchText = $('#game-search-input').val();
-                const regexp = new RegExp(`^${searchText.trim()}`, 'i');
-                let filterd_data = games_json.filter(ele => {
-                    // title_match = ele.title.toLowerCase().startsWith(searchText.trim());
-                    title_match = regexp.test(ele.title);
-                    return title_match;
-                });
-                console.log(filterd_data);
-                filterd_data.forEach(ele => {
-                    let btnHtml = `<button class="list-group-item list-group-item-action game-select-button" game-id="${ele.appid}">${ele.title}</button>`;
-                    $('#games-list').append(btnHtml);
-                });
+                //const regexp = new RegExp(`^${searchText}`, 'i');
+                if(searchText.length >=4) {
+                    let filterd_data = games_json.filter(ele => {
+                        title_match = ele.title.toLowerCase().indexOf(searchText) > -1;
+                    //    title_match = ele.title.toLowerCase().startsWith(searchText);
+                    //    title_match = regexp.test(ele.title);
+                        return title_match;
+                    });
+                    if(filterd_data.length > 0) {
+                        filterd_data.forEach(ele => {
+                            let btnHtml = `<button class="list-group-item list-group-item-action game-select-button" game-id="${ele.appid}">${ele.title}</button>`;
+                            $('#games-list').append(btnHtml);
+                        });
+                    } else {
+                        let notFoundHtml = '<span class="no-result">No results found!</span>'
+                        $('#games-list').append(notFoundHtml);
+                    }
+                }
             });
 
             $('#games-list').on('click', function (e) {
