@@ -1,6 +1,6 @@
+import os
 from flask import Flask
 from flask import render_template
-from flask import send_from_directory
 import pandas as pd
 import numpy as np
 import json
@@ -61,4 +61,5 @@ def game(appid):
 
 # main driver function
 if __name__ == '__main__':
-   app.run()
+   port = int(os.environ.get("PORT", 5000))
+   app.run(host='0.0.0.0', port=port)
